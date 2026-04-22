@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de paletas</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header>
+          <h1>Generador de paletas de colores</h1>
+          <p>Combinaciones de colores aleatorias</p>
+    </header>
+    <main>
+        <section>
+            <h2>¡Creá tu paleta!</h2>
+            <div>
+                <label for="cantidad">Cantidad de colores:</label>
+                  <select id="cantidad-colores" name="cantidad">
+                    <option value="6">6 colores</option>
+                    <option value="8">8 colores</option>
+                    <option value="9">9 colores</option>
+                  </select>
+            </div>
+            <button id="generar-btn">Generar paleta</button>
+        </section>
+        <section id="palette"></section>
+    </main>
+    <script src="./script.js"></script>
+</body>
+</html>
