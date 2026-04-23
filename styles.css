@@ -92,6 +92,7 @@ button:hover {
     height: 140px;
     border-radius: 10px;
     display: flex;
+    flex-direction: column;
     align-items: flex-end;
     justify-content: center;
     padding: 10px;
@@ -104,4 +105,10 @@ button:hover {
 
 .color-box:hover {
     transform: translateY(-5px);
+}
+
+.color-box span {
+    display: block;
+    font-size: 11px;
+    margin-top: 2px;
 }
