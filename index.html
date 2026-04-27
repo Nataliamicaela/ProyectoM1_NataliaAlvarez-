@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de paletas</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./CSS/styles.css">
 </head>
 <body>
     <header>
@@ -14,25 +14,27 @@
     <main>
         <section>
             <h2>¡Creá tu paleta!</h2>
-            <div>
-                <label for="cantidad-colores">Cantidad de colores:</label>
-                  <select id="cantidad-colores" name="cantidad">
-                    <option value="6">6 colores</option>
-                    <option value="8">8 colores</option>
-                    <option value="9">9 colores</option>
+            <form id="form-paleta">
+                <div>
+                    <label for="cantidad-colores">Cantidad de colores:</label>
+                    <select id="cantidad-colores" name="cantidad">
+                        <option value="6">6 colores</option>
+                        <option value="8">8 colores</option>
+                        <option value="9">9 colores</option>
                   </select>
-            </div>
-            <div>
-                <label for="formato-color">Formato de color:</label>
-                <select id="formato-color">
-                    <option value="hex">HEX</option>
-                    <option value="hsl">HSL</option>
+                </div>
+                <div>
+                    <label for="formato-color">Formato de color:</label>
+                    <select id="formato-color">
+                        <option value="hex">HEX</option>
+                        <option value="hsl">HSL</option>
                 </select>
-            </div>
-            <button id="generar-btn">Generar paleta</button>
+                </div>
+                <button id="generar-btn">Generar paleta</button>
+            </form>
         </section>
-        <section id="paleta"></section>
+        <section id="paleta" aria-live="polite"></section>
     </main>
-    <script src="./script.js"></script>
+    <script src="./JS/script.js"></script>
 </body>
 </html>
