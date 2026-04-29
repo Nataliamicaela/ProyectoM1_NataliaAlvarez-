@@ -4,8 +4,11 @@ contenedorPaleta.classList.add("oculto");
 const selectFormato = document.getElementById("formato-color");
 const botonGuardar = document.getElementById("guardar-paleta-btn");
 botonGuardar.classList.add("oculto");
+const botonCopiarPaleta = document.getElementById("copiar-paleta");
+botonCopiarPaleta.classList.add("oculto");
 const form = document.getElementById("form-paleta");
 const contenedorGuardadas = document.getElementById("paletas-guardadas");
+
 
 /* =========================
    ESTADO
@@ -23,6 +26,8 @@ form.addEventListener("submit" , (e) =>{
 });
 
 botonGuardar.addEventListener("click", guardarPaleta);
+
+botonCopiarPaleta.addEventListener("click", copiarPaleta);
 
 /* =========================
    GENERAR PALETA
@@ -46,12 +51,12 @@ function generarPaleta() {
 
     crearCajaColor(colorFondo, colorHex, colorACopiar);
 }
+    
+    mostrarMensaje("Paleta generada!");
 
     contenedorPaleta.classList.remove("oculto");
-
+    botonCopiarPaleta.classList.remove("oculto");
     botonGuardar.classList.remove("oculto");
-
-    mostrarMensaje("Paleta generada!");
 }
 
 /* =========================
@@ -385,4 +390,29 @@ function cargarPaletaEnPantalla(colores) {
     });
 
     mostrarMensaje("Paleta cargada");
+}
+
+function copiarPaleta(e) {
+    const formato = selectFormato.value;
+    const cajas = contenedorPaleta.querySelectorAll(".color-box");
+
+    const colores = [];
+
+    cajas.forEach(caja => {
+        if (formato === "hex") {
+            const hex = caja.querySelector(".hex").textContent;
+            colores.push(hex);
+        } else {
+            const hsl = caja.querySelector(".hsl").textContent;
+            colores.push(hsl);
+        }
+    });
+
+    const texto = colores.join(", ");
+
+    navigator.clipboard.writeText(texto);
+
+    mostrarMensaje("Paleta copiada!");
+
+    if (e) e.target.blur();
 }

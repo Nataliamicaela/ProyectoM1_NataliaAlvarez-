@@ -17,7 +17,7 @@ body {
 header {
     width: 100%;
     text-align: center;
-    padding: 40px 20px;
+    padding: 2.5rem 1.25rem;
     background: #222;
     color: white;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -29,7 +29,7 @@ header {
 header h1 {
     font-size: 2rem;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
 header p {
@@ -39,41 +39,41 @@ header p {
 main {
     width: 100%;
     max-width: 900px;
-    padding: 20px;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
 }
 
 section {
     background:  rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 25px;
+    padding: 2.2rem;
     border-radius: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     text-align: center;
 }
 
 label {
     font-weight: bold;
     display: block;
-    margin: 15px 0;
+    margin: 1rem 0;
     color: #dcdcdc;
 }
 
 select {
-    padding: 8px 12px;
+    padding: 0.5rem 0.75rem;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 1rem;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     background: #2f2f2f;
     color: white;
 }
 
 button {
-    padding: 10px 18px;
+    padding: 0.625rem 1.125rem;
     border: none;
     border-radius: 8px;
     background: linear-gradient(180deg, #ff6a00, #ee0979);
@@ -92,19 +92,20 @@ button:hover {
 #paleta {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
+    gap: 0.625rem;
+    margin: 0;
 }
 
 .color-box {
-    height: 140px;
+    height: 8.75rem;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding: 10px;
+    padding: 0.625rem;
     color: white;
-    font-size: 12px;
+    font-size: 0.7rem;
     font-weight: bold;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
     transition: transform 0.2s ease;
@@ -120,10 +121,11 @@ button:hover {
 
 .color-box span {
     display: block;
-    font-size: 11px;
-    margin-top: 2px;
-    padding: 4px;
+    font-size: 0.6875rem;
+    margin-top: 0.125rem;
+    padding: 0.25rem;
     border-radius: 5px;
+    white-space: nowrap;
 }
 
 button:focus, select:focus {
@@ -137,7 +139,7 @@ button:focus, select:focus {
     right: 20px;
     background: #333;
     color: #fff;
-    padding: 10px 15px;
+    padding: 0.625rem 0.9375rem;
     border-radius: 8px;
     opacity: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -151,9 +153,9 @@ button:focus, select:focus {
 }
 
 .color-box small {
-    font-size: 10px;
+    font-size: 0.625rem;
     background: rgba(0, 0, 0, 0.3);
-    padding: 2px 5px;
+    padding: 0.125rem 0.3125rem;
     border-radius: 4px;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -174,7 +176,7 @@ button:focus, select:focus {
     justify-content: center;
     background: rgba(0, 0, 0, 0.25);
     color: white;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -217,14 +219,14 @@ button:focus, select:focus {
 #paletas-guardadas {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.625rem;
 }
 
 .paleta-guardada {
     display: flex;
-    gap: 10px;
+    gap: 0.625rem;
     background: linear-gradient(135deg, #1e1e1e, #2b2b2b);
-    padding: 12px;
+    padding: 0.75rem;
     border-radius: 10px;
 }
 
@@ -235,9 +237,9 @@ button:focus, select:focus {
 }
 
 .paleta-guardada button {
-    margin-left: 5px;
-    padding: 5px 10px;
-    font-size: 12px;
+    margin-left: 0.3125rem;
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.75rem;
     border-radius: 6px;
 }
 
@@ -250,52 +252,38 @@ button:focus, select:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 150px;
+    min-height: 9.375rem;
     opacity: 0.5;
 }
 
 #paleta:empty::before {
-    content: "Generá una paleta para empezar 🎨";
-    font-size: 14px;
-}
-
-.paleta-guardada .colores {
-    display: flex;
-    gap: 5px;
+    content: "Generá una paleta para empezar";
+    font-size: 0.875rem;
 }
 
 .paleta-guardada .acciones {
     display: flex;
-    gap: 5px;
+    gap: 0.3125rem;
 }
 
-.colores {
-    display: flex;
-    gap: 5px;
-}
-
+.colores,
 .acciones {
     display: flex;
-    gap: 5px;
+    gap: 0.3125rem;
 }
 
 .paletas-guardadas{
-    margin-bottom: 22px;
+    margin-bottom: 1.375rem;
 }
 
 #paleta.oculto {
     display: none;
 }
 
-#guardar-paleta-btn.oculto {
-    display: none;
-}
-
-
 footer {
     width: 100%;
-    margin-top: 40px;
-    padding: 20px;
+    margin-top: 2.5rem;
+    padding: 1.25rem;
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.1);
     background: #111;
@@ -307,6 +295,20 @@ footer {
     text-align: center;
     color: #aaa;
     font-size: 0.95rem;
-    margin-top: 15px;
+    margin-top: 0.9375rem;
     opacity: 0.8;
+}
+
+#copiar-paleta {
+    align-self: center;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+}
+
+.oculto {
+    display: none;
 }
