@@ -11,9 +11,11 @@
           <h1>Generador de paletas de colores</h1>
           <p>Combinaciones de colores aleatorias</p>
     </header>
+
     <main>
-        <section>
-            <h2>¡Creá tu paleta!</h2>
+        <section aria-labelledby="titulo-paleta">
+            <h2 id="titulo-paleta">¡Creá tu paleta!</h2>
+
             <form id="form-paleta">
                 <div>
                     <label for="cantidad-colores">Cantidad de colores:</label>
@@ -23,6 +25,7 @@
                         <option value="9">9 colores</option>
                   </select>
                 </div>
+
                 <div>
                     <label for="formato-color">Formato de color:</label>
                     <select id="formato-color">
@@ -30,11 +33,23 @@
                         <option value="hsl">HSL</option>
                 </select>
                 </div>
-                <button id="generar-btn">Generar paleta</button>
+
+                <button type="submit" id="generar-btn" >Generar paleta</button>
             </form>
         </section>
+
         <section id="paleta" aria-live="polite"></section>
+        <button type="button" id="guardar-paleta-btn">Guardar paleta</button>
+        <section>
+            <h2 class="paletas-guardadas">Paletas guardadas</h2>
+            <div id="paletas-guardadas"></div>
+        </section>
     </main>
+
     <script src="./JS/script.js"></script>
+
+    <footer>
+        <p>Hecho por Natalia Alvarez para ColorFly Studio</p>
+    </footer>
 </body>
 </html>
