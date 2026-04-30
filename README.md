@@ -99,20 +99,11 @@ Se utilizó IA como herramienta de apoyo para:
 
 Los prompts utilizados y sus resultados se encuentran documentados en la carpeta de Google Drive.
 
----
-
-## 📁 Documentación adicional
-
-Incluye:
-
-- Capturas de pantalla / GIF del funcionamiento
-- Documentación del uso de IA (prompts y resultados)
-
-📌 Link de Drive:
 
 ---
 
 ## 👩‍💻 Autora
 
 Natalia Alvarez
+
 Proyecto realizado para ColorFly Studio

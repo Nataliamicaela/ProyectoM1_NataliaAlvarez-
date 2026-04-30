@@ -1,13 +1,16 @@
+/* =========================
+   SELECTORES
+========================= */
+
 const selectCantidad = document.getElementById("cantidad-colores");
-const contenedorPaleta = document.getElementById("paleta");
-contenedorPaleta.classList.add("oculto");
 const selectFormato = document.getElementById("formato-color");
-const botonGuardar = document.getElementById("guardar-paleta-btn");
-botonGuardar.classList.add("oculto");
-const botonCopiarPaleta = document.getElementById("copiar-paleta");
-botonCopiarPaleta.classList.add("oculto");
 const form = document.getElementById("form-paleta");
+
+const contenedorPaleta = document.getElementById("paleta");
 const contenedorGuardadas = document.getElementById("paletas-guardadas");
+
+const botonGuardar = document.getElementById("guardar-paleta-btn");
+const botonCopiarPaleta = document.getElementById("copiar-paleta");
 
 
 /* =========================
@@ -17,17 +20,39 @@ let paletaActual = [];
 let paletasGuardadas = [];
 
 /* =========================
+   INICIALIZACIÓN
+========================= */
+
+init();
+
+function init() {
+    ocultarUIInicial();
+    cargarPaletas();
+    asignarEventos();
+}
+
+function ocultarUIInicial() {
+    contenedorPaleta.classList.add("oculto");
+    botonGuardar.classList.add("oculto");
+    botonCopiarPaleta.classList.add("oculto");
+}
+
+function asignarEventos() {
+    form.addEventListener("submit", handleSubmit);
+    botonGuardar.addEventListener("click", guardarPaleta);
+    botonCopiarPaleta.addEventListener("click", copiarPaleta);
+}
+
+
+/* =========================
    EVENTOS
 ========================= */
-form.addEventListener("submit" , (e) =>{
+function handleSubmit(e) {
     e.preventDefault();
     generarPaleta();
     document.activeElement.blur();
-});
+}
 
-botonGuardar.addEventListener("click", guardarPaleta);
-
-botonCopiarPaleta.addEventListener("click", copiarPaleta);
 
 /* =========================
    GENERAR PALETA
@@ -37,26 +62,34 @@ function generarPaleta() {
     const cantidad = +selectCantidad.value;
     const formato = selectFormato.value;
 
-    contenedorPaleta.innerHTML = "";
-    paletaActual = [];
+    limpiarContenedorPaleta();
 
     for (let i = 0; i < cantidad; i++) {
         const colorHex = generarColorHex();
         const colorHsl = generarColorHsl();
 
-        const colorFondo = formato === "hex" ? colorHex : colorHsl;
-        const colorACopiar = formato === "hex" ? colorHex : colorHsl;
+        const colorFinal = formato === "hex" ? colorHex : colorHsl;
 
-        paletaActual.push(colorACopiar);
-
-    crearCajaColor(colorFondo, colorHex, colorACopiar);
+        paletaActual.push(colorFinal);
+        crearCajaColor(colorFinal, colorHex, colorFinal);
 }
-    
+    mostrarUITrasGeneracion();
     mostrarMensaje("Paleta generada!");
+}
 
+function limpiarContenedorPaleta() {
+    contenedorPaleta.innerHTML = "";
+    paletaActual = [];
+}
+
+/* =========================
+   UI
+========================= */
+
+function mostrarUITrasGeneracion() {
     contenedorPaleta.classList.remove("oculto");
-    botonCopiarPaleta.classList.remove("oculto");
     botonGuardar.classList.remove("oculto");
+    botonCopiarPaleta.classList.remove("oculto");
 }
 
 /* =========================
@@ -87,57 +120,91 @@ function generarColorHsl() {
 ========================= */
 
 function crearCajaColor(colorFondo, colorHex, colorACopiar) {
-    const caja = document.createElement("div");
+    const colorBox = document.createElement("div");
 
-    caja.classList.add("color-box");
-    caja.style.backgroundColor = colorFondo;
+    colorBox.classList.add("color-box");
+    colorBox.style.backgroundColor = colorFondo;
 
-    caja.setAttribute("tabindex", "0");
-    caja.setAttribute("role", "button");
-    caja.setAttribute(
+    aplicarAccesibilidad(colorBox, colorHex);
+    aplicarConstraste(colorBox, colorFondo);
+
+    colorBox.innerHTML = `
+        <span class="hex">${colorHex}</span>
+        <span class="hsl">${obtenerHsl(colorFondo, colorHex)}</span>
+        <div class="overlay">Click para copiar</div>
+    `;
+
+    agregarEventosColor(colorBox, colorACopiar);
+
+    contenedorPaleta.appendChild(colorBox);
+}
+
+function aplicarAccesibilidad(elemento, colorHex) {
+    elemento.setAttribute("tabindex", "0");
+    elemento.setAttribute("role", "button");
+    elemento.setAttribute(
         "aria-label",
         `Color ${colorHex}. Presionar Enter para copiar`
     );
+}
 
-    const esClaro = colorFondo.startsWith("#")
-        ? esColorClaroHex(colorFondo)
-        : esColorClaroHsl(colorFondo); 
+function aplicarConstraste(elemento, color) {
+    const esClaro = color.startsWith("#")
+        ? esColorClaroHex(color)
+        : esColorClaroHsl(color); 
 
-        caja.classList.add(esClaro ? "light" : "dark");
+    elemento.classList.add(esClaro ? "light" : "dark");
+}
 
-    caja.innerHTML = `
-            <span class="hex">${colorHex}</span>
-            <span class="hsl">${colorFondo.startsWith("hsl") ? colorFondo : convertirHexAHsl(colorHex)}</span>
-            <div class="overlay">Click para copiar</div>
-    `;
+function obtenerHsl(colorFondo, colorHex) {
+    return colorFondo.startsWith("hsl")
+        ? colorFondo
+        : convertirHexAHsl(colorHex);
+}
 
-    caja.addEventListener("click", () => copiarColor(caja, colorACopiar));
+function agregarEventosColor(elemento, color) {
+    elemento.addEventListener("click", () => copiarColor(elemento, color));
 
-    caja.addEventListener("keydown", (e) => {
+    elemento.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            copiarColor(caja, colorACopiar);
+            copiarColor(elemento, color);
         }
     });
-    
-    contenedorPaleta.appendChild(caja);
 }
 
 /* =========================
    COPIAR
 ========================= */
 
-function copiarColor(caja, color) {
+function copiarColor(elemento, color) {
     navigator.clipboard.writeText(color);
 
-    caja.classList.add("copied");
+    elemento.classList.add("copied");
 
     setTimeout(() => {
-        caja.classList.remove("copied");
+        elemento.classList.remove("copied");
     }, 200);
 
     mostrarMensaje(`Copiado: ${color}`);
 }
+
+function copiarPaleta(e) {
+    const formato = selectFormato.value;
+
+    const colores = [...contenedorPaleta.querySelectorAll(".color-box")]
+        .map(caja =>
+            formato === "hex"
+                ? caja.querySelector(".hex").textContent
+                : caja.querySelector(".hsl").textContent
+        );
+
+    navigator.clipboard.writeText(colores.join(", "));
+    mostrarMensaje("Paleta copiada!");
+
+    if (e) e.target.blur();
+}
+
 
 /* =========================
    GUARDAR PALETA
@@ -155,9 +222,7 @@ function guardarPaleta(e) {
     };
 
     paletasGuardadas.push(nuevaPaleta);
-
-    localStorage.setItem("paletas", JSON.stringify(paletasGuardadas));
-
+    actualizarStorage();
     renderizarPaletasGuardadas();
 
     mostrarMensaje("Paleta guardada!");
@@ -166,64 +231,95 @@ function guardarPaleta(e) {
 }
 
 /* =========================
+   STORAGE
+========================= */
+
+function actualizarStorage() {
+    localStorage.setItem("paletas", JSON.stringify(paletasGuardadas));
+}
+
+function cargarPaletas() {
+    const data = localStorage.getItem("paletas");
+    if (!data) return;
+
+    try {
+        const parsed = JSON.parse(data);
+
+        paletasGuardadas = Array.isArray(parsed)
+            ? parsed.filter(p => p && Array.isArray(p.colores))
+            : [];
+
+    } catch {
+        paletasGuardadas = [];
+    }
+
+    renderizarPaletasGuardadas();
+}
+
+
+/* =========================
    RENDER GUARDADAS
 ========================= */
 function renderizarPaletasGuardadas() {
     contenedorGuardadas.innerHTML = "";
 
     if (paletasGuardadas.length === 0) {
-        const mensaje = document.createElement("p");
-        mensaje.textContent = "Todavía no guardaste ninguna paleta... ¡Creá una y guardala!";
-        mensaje.classList.add("mensaje-vacio");
-
-        contenedorGuardadas.appendChild(mensaje);
+        contenedorGuardadas.innerHTML = 
+            '<p class="mensaje-vacio">Todavía no guardaste ninguna paleta... ¡Creá una y guardala!</p>'
         return;
     }
 
     paletasGuardadas.forEach(paleta => {
-        const contenedor = document.createElement("div");
-        contenedor.classList.add("paleta-guardada");
+        const paletteItem = document.createElement("div");
+        paletteItem.classList.add("paleta-guardada");
 
-        const contenedorColores = document.createElement("div");
-        contenedorColores.classList.add("colores");
+        const colores = document.createElement("div");
+        colores.classList.add("colores");
 
 
         paleta.colores.forEach(color => {
-            const box = document.createElement("div");
-            box.classList.add("mini-color");
-            box.style.background = color;
-            contenedorColores.appendChild(box);
+            const mini = document.createElement("div");
+            mini.classList.add("mini-color");
+            mini.style.background = color;
+            colores.appendChild(mini);
         });
 
-        const contenedorAcciones = document.createElement("div");
-        contenedorAcciones.classList.add("acciones");
+        const acciones = crearAccionesPaleta(paleta);
 
+        paletteItem.appendChild(colores);
+        paletteItem.appendChild(acciones);
 
-        const btnCargar = document.createElement("button");
-        btnCargar.textContent = "Cargar";
-
-        btnCargar.addEventListener("click", (e) => {
-            cargarPaletaEnPantalla(paleta.colores);
-            e.target.blur();
-        });
-
-        const btnEliminar = document.createElement("button");
-        btnEliminar.textContent = "Eliminar";
-
-        btnEliminar.addEventListener("click", (e) => {
-            e.stopPropagation();
-            eliminarPaleta(paleta.id);
-            e.target.blur();
-        });
-
-        contenedorAcciones.appendChild(btnCargar);
-        contenedorAcciones.appendChild(btnEliminar);
-
-        contenedor.appendChild(contenedorColores);
-        contenedor.appendChild(contenedorAcciones);
-
-        contenedorGuardadas.appendChild(contenedor);
+        contenedorGuardadas.appendChild(paletteItem);
     });
+}
+
+function crearAccionesPaleta(paleta) {
+    const acciones = document.createElement("div");
+    acciones.classList.add("acciones");
+
+    const btnCargar = crearBoton("Cargar", () =>
+        cargarPaletaEnPantalla(paleta.colores)
+);
+
+    const btnEliminar = crearBoton("Eliminar", (e) => {
+        e.stopPropagation();
+        eliminarPaleta(paleta.id);
+    });
+
+    acciones.append(btnCargar, btnEliminar);
+    return acciones;
+}
+
+function crearBoton(texto, handler) {
+    const btn = document.createElement("button");
+    btn.textContent = texto;
+
+    btn.addEventListener("click", (e) => {
+        handler(e);
+        e.target.blur();
+    });
+
+    return btn;
 }
 
 /* =========================
@@ -231,42 +327,26 @@ function renderizarPaletasGuardadas() {
 ========================= */
 function eliminarPaleta(id) {
     paletasGuardadas = paletasGuardadas.filter(p => p.id !== id);
-
-    localStorage.setItem("paletas", JSON.stringify(paletasGuardadas));
-
+    actualizarStorage();
     renderizarPaletasGuardadas();
-
     mostrarMensaje("Paleta eliminada");
 }
 
 /* =========================
    CARGAR AL INICIO
 ========================= */
-function cargarPaletas() {
-    const data = localStorage.getItem("paletas");
+function cargarPaletaEnPantalla(colores) {
+    limpiarContenedorPaleta();
 
-    if (!data) return;
+    colores.forEach(color => {
+        const hex = color.startsWith("#") ? color : convertirHslAHex(color);
+        crearCajaColor(color, hex, color);
+        paletaActual.push(color);
+    });
 
-    try {
-        const parsed = JSON.parse(data);
-
-        if (!Array.isArray(parsed)) {
-            paletasGuardadas = [];
-            return;
-        }
-
-        paletasGuardadas = parsed.filter(p => {
-            return p && Array.isArray(p.colores);
-        });
-
-    } catch (error) {
-        paletasGuardadas = [];
-    }
-
-    renderizarPaletasGuardadas();
+    mostrarUITrasGeneracion();
+    mostrarMensaje("Paleta cargada");
 }
-
-cargarPaletas();
 
 
 /* =========================
@@ -304,15 +384,11 @@ function esColorClaroHex(hex) {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
-
-    const luminancia = (0.299 * r + 0.587 * g + 0.114 * b);
-
-    return luminancia > 150;
+    return (0.299*r + 0.587*g + 0.114*b) > 150;
 }
 
 function esColorClaroHsl(hsl) {
-    const valores = hsl.match(/\d+/g);
-    const l = parseInt(valores[2]); 
+    const l = parseInt(hsl.match(/\d+/g)[2]);
     return l > 60;
 }
 
@@ -327,92 +403,29 @@ function convertirHexAHsl(hex) {
 
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
-    let h, s, l;
-
-    l = (max + min) / 2;
+    let h, s, l=(max+min)/2;
 
     if (max === min) {
-        h = s = 0;
-    } else {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        const d=max-min;
+        s=l>0.5?d/(2-max-min):d/(max+min);
+        h=(max===r?(g-b)/d+(g<b?6:0):
+           max===g?(b-r)/d+2:(r-g)/d+4)*60;
+    } else h=s=0;
 
-        switch (max) {
-            case r:
-                h = (g - b) / d + (g < b ? 6 : 0);
-                break;
-            case g:
-                h = (b - r) / d + 2;
-                break;
-            case b: 
-                h = (r - g) / d + 4;
-                break;
-        }
-
-        h = Math.round(h * 60);
-    }
-
-    s = Math.round(s * 100);
-    l = Math.round(l * 100);
-
-    return `hsl(${h}, ${s}%, ${l}%)`; 
+    return `hsl(${Math.round(h)}, ${Math.round(s*100)}%, ${Math.round(l*100)}%)`;
 }
 
 /* =========================
    HSL → HEX
 ========================= */
+
 function convertirHslAHex(hsl) {
-    const [h, s, l] = hsl.match(/\d+/g).map(Number);
-
-    const a = s * Math.min(l, 100 - l) / 10000;
-    const f = n => {
-        const k = (n + h / 30) % 12;
-        const color = l / 100 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-        return Math.round(255 * color).toString(16).padStart(2, '0');
+    const [h,s,l]=hsl.match(/\d+/g).map(Number);
+    const a=s*Math.min(l,100-l)/10000;
+    const f=n=>{
+        const k=(n+h/30)%12;
+        const c=l/100-a*Math.max(Math.min(k-3,9-k,1),-1);
+        return Math.round(255*c).toString(16).padStart(2,"0");
     };
-
     return `#${f(0)}${f(8)}${f(4)}`;
-}
-
-function cargarPaletaEnPantalla(colores) {
-    contenedorPaleta.innerHTML = "";
-    paletaActual = [];
-
-    colores.forEach(color => {
-        const colorHex = color.startsWith("#") ? color : null;
-
-        // Si es HSL, generamos HEX solo para mostrar
-        const hex = colorHex || convertirHslAHex(color);
-
-        crearCajaColor(color, hex, color);
-
-        paletaActual.push(color);
-    });
-
-    mostrarMensaje("Paleta cargada");
-}
-
-function copiarPaleta(e) {
-    const formato = selectFormato.value;
-    const cajas = contenedorPaleta.querySelectorAll(".color-box");
-
-    const colores = [];
-
-    cajas.forEach(caja => {
-        if (formato === "hex") {
-            const hex = caja.querySelector(".hex").textContent;
-            colores.push(hex);
-        } else {
-            const hsl = caja.querySelector(".hsl").textContent;
-            colores.push(hsl);
-        }
-    });
-
-    const texto = colores.join(", ");
-
-    navigator.clipboard.writeText(texto);
-
-    mostrarMensaje("Paleta copiada!");
-
-    if (e) e.target.blur();
 }

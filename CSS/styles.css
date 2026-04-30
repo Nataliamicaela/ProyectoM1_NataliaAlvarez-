@@ -96,6 +96,10 @@ button:hover {
     margin: 0;
 }
 
+#titulo-paleta{
+    margin: 1rem 0rem 2rem 0rem;
+}
+
 .color-box {
     height: 8.75rem;
     border-radius: 10px;
@@ -243,10 +247,6 @@ button:focus, select:focus {
     border-radius: 6px;
 }
 
-#guardar-paleta-btn {
-    width: auto;
-    align-self: center;
-}
 
 #paleta:empty {
     display: flex;
@@ -299,9 +299,6 @@ footer {
     opacity: 0.8;
 }
 
-#copiar-paleta {
-    align-self: center;
-}
 
 .botones {
     display: flex;
@@ -311,4 +308,115 @@ footer {
 
 .oculto {
     display: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+/*  Tablets y celulares grandes */
+
+@media (max-width: 768px) {
+
+    header {
+        padding: 2rem 1rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    main {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    section {
+        padding: 1.5rem;
+    }
+
+/* Botones en columna */
+
+    .botones {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .botones button {
+        width: 100%;
+        max-width: 250px;
+}
+
+    .botones button,
+    #generar-btn {
+        width: 100%;
+        max-width: 150px;
+}
+
+
+/* Grid más compacto */
+
+    #paleta {
+        grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+        gap: 0.5rem;
+    }
+
+/*  Cajas de colores */
+
+    .color-box {
+        height: 6rem;
+        padding: 0.5rem;
+    }
+
+    .color-box span {
+        font-size: 0.6rem;
+    }
+
+    .overlay {
+        font-size: 0.7rem;
+        text-align: center;
+        padding: 0.25rem;
+    }
+
+/*  Paletas guardadas */
+
+    .paleta-guardada {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .acciones {
+        justify-content: center;
+    }
+}
+
+/*  Celulares chicos */
+
+@media (max-width: 480px) {
+
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    header p {
+        font-size: 0.85rem;
+    }
+
+    .color-box {
+        height: 5rem;
+    }
+
+    .color-box span {
+        font-size: 0.55rem;
+    }
+
+    .overlay {
+        font-size: 0.65rem;
+    }
+
+    .mini-color {
+        width: 25px;
+        height: 25px;
+    }
 }
